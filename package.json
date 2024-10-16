@@ -1,12 +1,19 @@
 {
   "name": "react-resize-it",
-  "version": "1.0.0-beta.0",
+  "version": "1.0.1-beta.0",
   "main": "dist/resize.js",
   "types": "dist/resize.d.ts",
   "scripts": {
     "build": "tsc"
   },
-  "keywords": [],
+  "keywords": [
+    "resize",
+    "react",
+    "ui",
+    "component",
+    "layout",
+    "typescript"
+  ],
   "author": {
     "name": "Breno Amarante",
     "email": "breno.ba777@gmail.com"

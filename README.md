@@ -1,6 +1,7 @@
+
 # React Resize It
 
-**React Resize It** is a lightweight and intuitive library designed for seamless resizing of containers in your React applications. With its user-friendly interface, developers can effortlessly adjust element sizes using just a few lines of code, enhancing both user experience and layout flexibility.
+**React Resize It** is a lightweight and intuitive library designed for seamless resizing of containers in your React applications. With its user-friendly interface and support for customizable resize directions, developers can effortlessly adjust element sizes using just a few lines of code, enhancing both user experience and layout flexibility.
 
 ## Installation
 
@@ -37,7 +38,7 @@ Create a container that you want to resize along with a handler element that wil
 
 ### 3. Implement the `ResizeContainer` Function
 
-Now, call the `ResizeContainer` function within your React component, passing the IDs of the container and the resize handler as arguments.
+Now, call the `ResizeContainer` function within your React component, passing the IDs of the container and the resize handler as arguments. You can also specify individual resize directions for different components by using the `data-direction` attribute.
 
 ```javascript
 import React, { useEffect } from 'react';
@@ -47,8 +48,8 @@ const MyComponent = () => {
     useEffect(() => {
         // Initialize the resizing functionality
         const cleanup = ResizeContainer({ 
-            containerId: 'myContainer', 
-            resizeHandlerId: 'myResizeHandler' 
+            containerId: '#myContainer', 
+            resizeHandlerId: '#myResizeHandler' 
         });
         
         return cleanup; // Clean up event listeners on unmount
@@ -65,10 +66,21 @@ const MyComponent = () => {
 export default MyComponent;
 ```
 
+### 4. Customizing Resize Direction
+
+To allow individual components to have distinct resizing directions, set the `data-direction` attribute on your container elements. This will override the default direction provided in the `ResizeContainer` function.
+
+```html
+<div id="myContainer" data-direction="vertical" style="...">
+    ...
+</div>
+```
+
 ## Parameters
 
-- **`containerId`** (string): The ID of the container element that you want to resize.
-- **`resizeHandlerId`** (string): The ID of the element that will act as the resize handler.
+- **`containerId`** (string): The ID of the container element that you want to resize. Include a `#` prefix to indicate an ID selector.
+- **`resizeHandlerId`** (string): The ID of the element that will act as the resize handler. Include a `#` prefix to indicate an ID selector.
+- **`direction`** (string, optional): The default resize direction. Use `"horizontal"` for width adjustments or `"vertical"` for height adjustments. If specified, this can be overridden by individual components using the `data-direction` attribute.
 
 ## License
 
@@ -80,4 +92,4 @@ If you'd like to contribute to this project, feel free to submit a pull request 
 
 ## Author
 
-Breno Amarante - [breno-777](https://github.com/breno-777)
+Breno Amarante [Github](https://github.com/breno-777)

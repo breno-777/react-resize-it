@@ -11,30 +11,34 @@ export const ResizeContainer = ({ containerId, resizeHandlerId, direction }: Res
     const resizeHandlers = document.querySelectorAll(resizeHandlerId) as NodeListOf<HTMLElement>;
 
     containers.forEach((container, index) => {
+        const computedStyle = window.getComputedStyle(container);
         const resizeHandler = resizeHandlers[index];
 
         // Ensure that both the container and handler are defined; throw an error if not.
         if (!container || !resizeHandler) throw new Error("ContainerId or resizeHandlerId is required!");
 
-        // Define default direction or use individual direction for each component
+        // Set default direction or use individual direction for each component.
         const elementDirection = container.getAttribute("data-direction") || direction;
 
-        // Extract the min and max dimensions for resizing, defaulting to infinity or 0 as fallback values.
+        // Variable to track the active container being resized.
+        let activeContainer: HTMLElement | null = null;
+
+        // Extract the min and max dimensions for resizing, defaulting to Infinity or 0 as fallback values.
         const { maxWidth, minWidth, maxHeight, minHeight } = {
-            maxWidth: parseInt(container.style.maxWidth.replace("px", ""), 10) || Infinity,
-            minWidth: parseInt(container.style.minWidth.replace("px", ""), 10) || 0,
-            maxHeight: parseInt(container.style.maxHeight.replace("px", ""), 10) || Infinity,
-            minHeight: parseInt(container.style.minHeight.replace("px", ""), 10) || 0
-        }
+            maxWidth: parseInt(computedStyle.maxWidth, 10) || Infinity,
+            minWidth: parseInt(computedStyle.minWidth, 10) || 0,
+            maxHeight: parseInt(computedStyle.maxHeight, 10) || Infinity,
+            minHeight: parseInt(computedStyle.minHeight, 10) || 0
+        };
 
         // Helper function to update width within specified bounds.
         const updateWidth = (newWidth: number) => {
-            container.style.width = `${Math.min(Math.max(newWidth, minWidth), maxWidth)}px`;
+            if (activeContainer) activeContainer.style.width = `${Math.min(Math.max(newWidth, minWidth), maxWidth)}px`;
         }
 
         // Helper function to update height within specified bounds.
         const updateHeight = (newHeight: number) => {
-            container.style.height = `${Math.min(Math.max(newHeight, minHeight), maxHeight)}px`;
+            if (activeContainer) activeContainer.style.height = `${Math.min(Math.max(newHeight, minHeight), maxHeight)}px`;
         }
 
         /**
@@ -42,11 +46,13 @@ export const ResizeContainer = ({ containerId, resizeHandlerId, direction }: Res
          * Adjusts width if 'horizontal' and height if 'vertical', limited by the defined bounds.
          */
         const onMouseMove = (eMove: MouseEvent) => {
+            if (!activeContainer) return;
+
             if (elementDirection === "horizontal") {
-                const newWidth = eMove.clientX;
+                const newWidth = eMove.clientX - activeContainer.getBoundingClientRect().left;
                 updateWidth(newWidth);
             } else if (elementDirection === "vertical") {
-                const newHeight = eMove.clientY;
+                const newHeight = eMove.clientY - activeContainer.getBoundingClientRect().top;
                 updateHeight(newHeight);
             }
         };
@@ -58,6 +64,7 @@ export const ResizeContainer = ({ containerId, resizeHandlerId, direction }: Res
         const onMouseUp = () => {
             document.removeEventListener("mousemove", onMouseMove);
             document.removeEventListener("mouseup", onMouseUp);
+            activeContainer = null; // Reset active container after resizing ends.
         };
 
         /**
@@ -66,18 +73,19 @@ export const ResizeContainer = ({ containerId, resizeHandlerId, direction }: Res
          */
         const onMouseDown = (e: MouseEvent) => {
             e.preventDefault();
+            activeContainer = container; // Set active container to the one being resized.
             document.addEventListener("mousemove", onMouseMove);
             document.addEventListener("mouseup", onMouseUp);
         };
 
         // Attach mousedown listener to the resize handler to initiate the resizing sequence.
-        if (resizeHandler) resizeHandler.addEventListener("mousedown", onMouseDown);
+        resizeHandler.addEventListener("mousedown", onMouseDown);
 
         // Cleanup function to remove event listeners when no longer needed.
         return () => {
+            resizeHandler?.removeEventListener("mousedown", onMouseDown);
             document.removeEventListener("mousemove", onMouseMove);
             document.removeEventListener("mouseup", onMouseUp);
-            resizeHandler?.removeEventListener("mousedown", onMouseDown);
         };
     });
 };

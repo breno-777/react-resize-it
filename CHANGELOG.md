@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.0.2-beta.0] - 2024-10-17
+### Added
+- Improved the `ResizeContainer` function to include more refined control over min and max width and height constraints.
+- Enhanced error handling for cases where either `containerId` or `resizeHandlerId` is undefined.
+- Included helper functions `updateWidth` and `updateHeight` for dynamically setting the dimensions with constraints.
+  
+### Changed
+- Adjusted the internal logic to fetch computed styles for min and max dimensions instead of reading directly from inline styles.
+- Updated documentation to reflect usage improvements and function details.
+- Improved the onMouseMove function to align width and height adjustment based on container position and mouse coordinates.
+
+### Fixed
+- Refined event listener cleanup logic, ensuring no residual listeners post unmounting.
+  
 ## [1.0.1-beta.0] - 2024-10-16
 ### Added
 - Initial release of **React Resize It**, a lightweight library for resizing containers in React applications.

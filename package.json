@@ -1,6 +1,6 @@
 {
   "name": "react-resize-it",
-  "version": "1.0.1-beta.0",
+  "version": "1.0.2-beta.0",
   "main": "dist/resize.js",
   "types": "dist/resize.d.ts",
   "scripts": {
@@ -17,6 +17,10 @@
   "author": {
     "name": "Breno Amarante",
     "email": "breno.ba777@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/breno-777/react-resize-it"
   },
   "license": "MIT",
   "description": "React Resize It is a lightweight and intuitive library that allows containers to be resized easily and efficiently. This tool gives developers the ability to adjust the size of elements in their React applications with just a few lines of code, improving the user experience and layout flexibility.",
